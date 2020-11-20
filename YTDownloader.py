@@ -1,4 +1,6 @@
+import os
 from pytube import YouTube
+# from moviepy.editor import *
 
 ytd = YouTube(input("Please input the yt link\n"))
 
@@ -10,6 +12,13 @@ stream = ytd.streams.filter(only_audio=(True if dlType == "audio" else False))
 
 print("Downloading...")
 
-stream[0].download(".")
+filePath = stream[0].download(".")
 
-print("Successfully downloaded audio from the provided link")
+"""
+if dlType == "audio":
+    video = VideoFileClip(filePath)
+    video.audio.write_audiofile("./", ytd.title)
+    os.remove(filePath)
+"""
+
+print("Successfully downloaded yt video")
