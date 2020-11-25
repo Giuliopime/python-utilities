@@ -1,5 +1,5 @@
-import re
 from pytube import YouTube, Playlist
+from moviepy.editor import *
 from tkinter import filedialog
 from tkinter import *
 
@@ -12,57 +12,62 @@ FOLDER = filedialog.askdirectory()
 YOUTUBE_STREAM_AUDIO = '140'
 choice = ""
 while choice != "0":
-    choice = input("\nReply with one of the following numbers to choose the operation to perform:"
+    try:
+        choice = input("\nReply with one of the following numbers to choose the operation to perform:"
                    "\n0 - Terminate the process"
                    "\n1 - Download a YouTube video"
                    "\n2 - Download a YouTube Playlist\n")
 
-    if choice == "0":
-        exit(0)
+        if choice == "0":
+            exit(0)
 
-    elif choice == "1":
-        video = YouTube(input("\nPlease input the YouTube video link\n"))
+        elif choice == "1":
+            video = YouTube(input("\nPlease input the YouTube video link\n"))
 
-        dlType = ""
-        while dlType != "1" and dlType != "2":
-            dlType = input(
-                "\nInsert:\n- '1' to download only audio\n- '2' to download the full video\n")
+            dlType = ""
+            while dlType != "1" and dlType != "2":
+                dlType = input(
+                    "\nInsert:\n- '1' to download only audio\n- '2' to download the full video\n")
 
-        streams = video.streams
+            streams = video.streams
 
-        print("\nDownloading...")
+            print("\nDownloading...")
 
-        if dlType == "1":
-            audioStream = streams.get_by_itag(YOUTUBE_STREAM_AUDIO)
-            audioStream.download(output_path=FOLDER)
-        else:
-            streams[0].download(output_path=FOLDER)
+            path = streams[0].download(output_path = FOLDER)
 
-        print("Downloaded " + video.title)
+            if dlType == "1":
+                videoFile = VideoFileClip(path)
+                videoFile.audio.write_audiofile(FOLDER + "/" + video.title + ".mp3")
+                videoFile.close()
+                os.remove(path)
 
-        print("\nSuccessfully downloaded YouTube video: " + video.title)
+            print("Downloaded " + video.title)
 
-    elif choice == "2":
-        playlist = Playlist(input("\nPlease input the YouTube playlist link\n"))
+            print("\nSuccessfully downloaded YouTube video: " + video.title)
 
-        playlist._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")  # Fixes empty playlist
+        elif choice == "2":
+            playlist = Playlist(input("\nPlease input the YouTube playlist link\n"))
 
-        dlType = ""
-        while dlType != "1" and dlType != "2":
-            dlType = input(
-                "\nInsert\n- '1' to download only audio\n- '2' to download the full video\n")
+            playlist._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")  # Fixes empty playlist
 
-        print("\nDownloading...")
+            dlType = ""
+            while dlType != "1" and dlType != "2":
+                dlType = input(
+                    "\nInsert\n- '1' to download only audio\n- '2' to download the full video\n")
 
-        if dlType == "1":
+            print("\nDownloading...")
+
             for video in playlist.videos:
-                audioStream = video.streams.get_by_itag(YOUTUBE_STREAM_AUDIO)
-                audioStream.download(output_path=FOLDER)
-                print("Downloaded " + audioStream.title)
-        else:
-            for video in playlist.videos:
-                video.streams[0].download(output_path=FOLDER)
+                path = video.streams[0].download(output_path=FOLDER)
+                if dlType == "1":
+                    videoFile = VideoFileClip(path)
+                    videoFile.audio.write_audiofile(FOLDER + "/" + video.title + ".mp3")
+                    videoFile.close()
+                    os.remove(path)
+
                 print("Downloaded " + video.title)
 
-        print("\nSuccessfully downloaded YouTube playlist: " + playlist.title)
+            print("\nSuccessfully downloaded YouTube playlist: " + playlist.title)
 
+    except Exception:
+        print("You didn't provide a correct link")
