@@ -2,6 +2,7 @@ from pytube import YouTube, Playlist
 from moviepy.editor import *
 from tkinter import filedialog
 from tkinter import *
+import re, os
 
 
 root = Tk()
@@ -69,5 +70,6 @@ while choice != "0":
 
             print("\nSuccessfully downloaded YouTube playlist: " + playlist.title)
 
-    except Exception:
+    except Exception as e:
+        print(e)
         print("You didn't provide a correct link")
