@@ -60,12 +60,16 @@ while choice != "0":
             print("\nDownloading...")
 
             for video in playlist.videos:
-                path = video.streams[0].download(output_path=FOLDER)
-                if dlType == "1":
-                    videoFile = VideoFileClip(path)
-                    videoFile.audio.write_audiofile(FOLDER + "/" + video.title + ".mp3")
-                    videoFile.close()
-                    os.remove(path)
+                try:
+                    path = video.streams.first().download(output_path=FOLDER)
+                    if dlType == "1":
+                        videoFile = VideoFileClip(path)
+                        videoFile.audio.write_audiofile(FOLDER + "/" + video.title + ".mp3")
+                        videoFile.close()
+                        os.remove(path)
+                except Exception as e:
+                    print(e)
+                    print("A video of the playlist couldn't be downloaded")
 
                 print("Downloaded " + video.title)
 
