@@ -16,9 +16,9 @@ choice = ""
 while choice != "0":
     try:
         choice = input("\nReply with one of the following numbers to choose the operation to perform:"
-                   "\n0 - Terminate the process"
-                   "\n1 - Download a YouTube video"
-                   "\n2 - Download a YouTube Playlist\n")
+                       "\n0 - Terminate the process"
+                       "\n1 - Download a YouTube video"
+                       "\n2 - Download a YouTube Playlist\n")
 
         if choice == "0":
             exit(0)
@@ -35,7 +35,7 @@ while choice != "0":
 
             print("\nDownloading...")
 
-            path = streams[0].download(output_path = FOLDER)
+            path = streams[0].download(output_path=FOLDER)
 
             if dlType == "1":
                 videoFile = VideoFileClip(path)
