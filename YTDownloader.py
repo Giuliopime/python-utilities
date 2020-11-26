@@ -1,9 +1,10 @@
-from pytube import YouTube, Playlist
-from moviepy.editor import *
-from tkinter import filedialog
+import os
+import re
 from tkinter import *
-import re, os
+from tkinter import filedialog
 
+from moviepy.editor import *
+from pytube import YouTube, Playlist
 
 root = Tk()
 root.withdraw()
