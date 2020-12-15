@@ -1,2 +1,2 @@
 # python-utilities
-Simple python utility scripts that I made while learning Python
+Simple Python utility scripts I made while learning the language.
